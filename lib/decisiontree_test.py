@@ -25,7 +25,7 @@ def mae_min(y, w):
 def leaves_mae(l, y, w=None):
     if w is None:
         w = numpy.ones(y.size)
-    return sum(mae_min(y[l == i], w[l == i]) for i in numpy.unique(l))
+    return numpy.array([mae_min(y[l == i], w[l == i]) for i in numpy.unique(l)])
 
 
 def test_against_sklearn_no_weights():
@@ -37,8 +37,8 @@ def test_against_sklearn_no_weights():
             h_leaves = fit_apply(X, y, X, algo='heaps')
             are_leaves_the_same = (sk_leaves == h_leaves).all() or (sk_leaves == (3 - h_leaves)).all()
             if not are_leaves_the_same:
-                sk_mae = leaves_mae(sk_leaves, y)
-                h_mae = leaves_mae(h_leaves, y)
+                sk_mae = leaves_mae(sk_leaves, y).sum()
+                h_mae = leaves_mae(h_leaves, y).sum()
                 assert numpy.isclose(sk_mae, h_mae)
 
 def test_against_sklearn_with_weights():
@@ -50,8 +50,8 @@ def test_against_sklearn_with_weights():
         h_leaves = fit_apply(X, y, X_apply=X, sample_weights=w, algo='heaps')
         are_leaves_the_same = (sk_leaves == h_leaves).all() or (sk_leaves == (3 - h_leaves)).all()
         if not are_leaves_the_same:
-            sk_mae = leaves_mae(sk_leaves, y, w)
-            h_mae = leaves_mae(h_leaves, y, w)
+            sk_mae = leaves_mae(sk_leaves, y, w).sum()
+            h_mae = leaves_mae(h_leaves, y, w).sum()
             if not numpy.isclose(sk_mae, h_mae):
                 assert sk_mae > h_mae
                 print(sk_mae, h_mae)
