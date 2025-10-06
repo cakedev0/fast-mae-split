@@ -65,7 +65,7 @@ def compute_prefix_maes(y: numpy.ndarray, w: numpy.ndarray):
     Parameters
     ----------
     y : numpy.ndarray
-        Array of target values (assumed sorted).
+        Array of target values
     w : numpy.ndarray
         Array of sample weights.
     Returns
@@ -79,7 +79,7 @@ def compute_prefix_maes(y: numpy.ndarray, w: numpy.ndarray):
     maes = numpy.full(n-1, numpy.inf)
     for i in range(n - 1):
         # Insert y[i] into the appropriate heap
-        if y[i] > below.top():
+        if above.empty() or y[i] > below.top():
             above.push(y[i], w[i])
         else:
             below.push(y[i], w[i])

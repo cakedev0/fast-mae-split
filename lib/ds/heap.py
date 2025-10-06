@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 from numba import types as ntypes
 from numba.experimental import jitclass
 
@@ -16,8 +16,8 @@ from numba.experimental import jitclass
 class WeightedHeap:
 
     def __init__(self, max_size, min_heap=True):
-        self.heap = numpy.zeros(max_size, dtype=numpy.float64)
-        self.weights = numpy.zeros(max_size, dtype=numpy.float64)
+        self.heap = np.zeros(max_size, dtype=np.float64)
+        self.weights = np.zeros(max_size, dtype=np.float64)
         self.total_weight = 0
         self.weighted_sum = 0
         self.size = 0

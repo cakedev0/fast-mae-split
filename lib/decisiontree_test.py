@@ -43,7 +43,7 @@ def test_against_sklearn_no_weights():
 
 def test_against_sklearn_with_weights():
     print('with weights:')
-    for n in [5]*100:# + [10]*100 + [100]*100 + [1000]*10 + [10_000]*3:
+    for n in [5]*100 + [10]*100 + [100]*100 + [1000]*10 + [10_000]*3:
         X, y, w, _ = sample_X_y_w(n)
         reg = DecisionTreeRegressor(max_depth=1, criterion='absolute_error')
         sk_leaves = reg.fit(X, y, sample_weight=w).apply(X)
@@ -54,7 +54,4 @@ def test_against_sklearn_with_weights():
             h_mae = leaves_mae(h_leaves, y, w).sum()
             if not numpy.isclose(sk_mae, h_mae):
                 assert sk_mae > h_mae
-                print(sk_mae, h_mae)
-                print(X)
-                print(y)
-                print(w)
+                print(n, sk_mae, h_mae)
