@@ -6,14 +6,14 @@ from sklearn.metrics import mean_pinball_loss
 from .algo import (
     compute_prefix_loss_python_heap,
     compute_prefix_loss_heap,
-    compute_prefix_loss_segmenttree,
+    compute_left_loss_segmenttree,
 )
 
 @pytest.mark.parametrize("q", [0.5, 0.2, 0.9, 0.4, 0.75])
 @pytest.mark.parametrize("compute_prefix_loss", [
     compute_prefix_loss_python_heap,
     compute_prefix_loss_heap,
-    compute_prefix_loss_segmenttree,
+    compute_left_loss_segmenttree,
 ])
 def test_pinball_loss_precomputation_function(q, compute_prefix_loss):
     """
