@@ -3,7 +3,7 @@ import numpy as np
 
 from sklearn.metrics import mean_pinball_loss
 
-from .algo import (
+from .algos import (
     compute_prefix_loss_python_heap,
     compute_prefix_loss_heap,
     compute_left_loss_segmenttree,

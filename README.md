@@ -16,19 +16,19 @@ for decision-tree regression with **weighted samples** and **arbitrary quantile 
 
 ## 1. Pinball loss with weights and an $O(1)$ formula
 
-For weighted data ${(y_i,w_i)}*{i=1}^n$ with $w_i > 0$, the pinball loss at level $\alpha\in[0,1]$ for a prediction $q\in\mathbb{R}$ is
+For weighted data ${(y_i,w_i)}_{i=1}^n$ with $w_i > 0$, the pinball loss at level $\alpha\in[0,1]$ for a prediction $q\in\mathbb{R}$ is
 
 $$
-L*\alpha(q)
-= \sum_{i} w_i!\left(\alpha\max(y_i-q,0) + (1-\alpha)\max(q-y_i,0)\right).
+L_\alpha(q)
+= \sum_{i} w_i \left(\alpha\max(y_i-q,0) + (1-\alpha)\max(q-y_i,0)\right).
 $$
 
 Splitting by whether $y_i\ge q$ or $y_i < q$, define the aggregates
 $$
-W^+(q)= \sum_{y_i\ge q}! w_i,\quad
-Y^+(q)= \sum_{y_i\ge q}! w_i y_i,\qquad
-W^-(q)= \sum_{y_i< q}! w_i,\quad
-Y^-(q)= \sum_{y_i< q}! w_i y_i.
+W^+(q)= \sum_{y_i\ge q} w_i,\quad
+Y^+(q)= \sum_{y_i\ge q} w_i y_i,\qquad
+W^-(q)= \sum_{y_i< q} w_i,\quad
+Y^-(q)= \sum_{y_i< q} w_i y_i.
 $$
 
 Then
@@ -42,8 +42,10 @@ which is **$O(1)$** to evaluate once the four aggregates are maintained.
 **Code (notation: `alpha` is the level, `q` is the value):**
 
 ```python
-loss = alpha * (above.weighted_sum - q * above.total_weight) \
+loss = (
+    alpha * (above.weighted_sum - q * above.total_weight)
      + (1 - alpha) * (q * below.total_weight - below.weighted_sum)
+)
 # "above": indices with y_i >= q; "below": indices with y_i < q
 ```
 
@@ -70,9 +72,9 @@ During a left→right sweep over samples sorted by the candidate feature:
 A symmetric right→left sweep yields the right-child losses; summing gives the impurity at each threshold.
 
 **Implementation:**
-- A simple python WeightedHeap (wraps stdlib's `heapq`)
-- A numba WeightedHeap
-- The left→right sweep loop:
+- A simple python WeightedHeap (wraps stdlib's `heapq`): `lib/ds/pythonheap.py` 
+- A numba WeightedHeap: `lib/ds/heap.py` 
+- The left→right sweep loop: `lib/algos/heap.py` 
 
 ### 2.2 Segment tree (guaranteed $O(n\log n)$)
 
@@ -100,8 +102,8 @@ This lets us (i) **set** the current sample’s $(y_i, w_i)$ at its leaf (i.e. a
 
 **Implementation.**
 
-* The weighted segment tree class:
-* The left→right sweep loop:
+* The weighted segment tree class: `lib/ds/segment_tree.py` 
+* The left→right sweep loop: `lib/algos/segment_tree.py` 
 
 ---
 
