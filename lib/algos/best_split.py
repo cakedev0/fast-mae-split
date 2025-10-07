@@ -2,7 +2,7 @@ import numpy as np
 
 from .heap import compute_prefix_loss_heap
 from .segment_tree import compute_left_loss_segmenttree
-from .bit import compute_left_loss_fenwick
+from .fenwick import compute_left_loss_fenwick
 
 
 METHODS = {

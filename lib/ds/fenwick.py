@@ -12,7 +12,7 @@ from numba.experimental import jitclass
     ('total_w', ntypes.float64),    # running total weight
     ('total_wy', ntypes.float64),   # running total weighted target
 ])
-class WeightedFenwickTree:
+class WeightedFenwick:
     """
     Fenwick tree (Binary Indexed Tree) for maintaining:
       - prefix sums of weights, and
