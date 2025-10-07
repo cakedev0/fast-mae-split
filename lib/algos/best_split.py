@@ -2,6 +2,14 @@ import numpy as np
 
 from .heap import compute_prefix_loss_heap
 from .segment_tree import compute_left_loss_segmenttree
+from .bit import compute_left_loss_fenwick
+
+
+METHODS = {
+    "heap": compute_prefix_loss_heap,
+    "segment-tree": compute_left_loss_segmenttree,
+    "fenwick": compute_left_loss_fenwick,
+}
 
 
 def find_best_split(x, y, w, alpha=0.5, method="heap"):
@@ -13,11 +21,7 @@ def find_best_split(x, y, w, alpha=0.5, method="heap"):
     split_loss : float
         The loss of the split (sum of left node loss and right node loss)
     """
-    assert method in ["heap", "segment-tree"]
-    func = (
-        compute_prefix_loss_heap if method == "heap"
-        else compute_left_loss_segmenttree
-    )
+    func = METHODS[method]
 
     sorter = np.argsort(x)
     x = x[sorter]
