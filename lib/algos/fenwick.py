@@ -2,16 +2,7 @@ import numpy as np
 from numba import njit
 
 from ..ds.fenwick import WeightedFenwick
-
-
-@njit
-def rankdata(x):
-    """
-    0-based rank of each element in x
-    """
-    rank = np.empty(x.size, dtype=np.int32)
-    rank[np.argsort(x)] = np.arange(0, rank.size, dtype=np.int32)
-    return rank
+from .utils import rankdata
 
 
 @njit

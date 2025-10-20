@@ -2,18 +2,13 @@ import numpy as np
 from numba import njit
 
 from ..ds.segment_tree import WeightedSegmentTree
+from .utils import rankdata
 
 
 @njit
-def rankdata(x: np.ndarray):
-    rank = np.empty(x.size, dtype=np.int32)
-    rank[np.argsort(x)] = np.arange(0, rank.size)
-    return rank
-
-
-@njit
-def compute_left_loss_segmenttree(y, w, alpha=0.5) -> np.ndarray:
-    ranks = rankdata(y)
+def compute_left_loss_segmenttree(y, w, alpha=0.5, ranks=None) -> np.ndarray:
+    if ranks is None:
+        ranks = rankdata(y)
     st = WeightedSegmentTree(y.size)
     loss = np.empty(y.size)
     for i in range(y.size):

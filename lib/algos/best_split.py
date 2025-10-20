@@ -1,8 +1,9 @@
 import numpy as np
 
 from .heap import compute_prefix_loss_heap
-from .segment_tree import compute_left_loss_segmenttree
 from .fenwick import compute_left_loss_fenwick
+from .segment_tree import compute_left_loss_segmenttree
+from .utils import rankdata
 
 
 METHODS = {
@@ -27,10 +28,15 @@ def find_best_split(x, y, w, alpha=0.5, method="heap"):
     x = x[sorter]
     y = y[sorter]
     w = w[sorter]
-    
-    left_loss = func(y, w, alpha)
-    right_loss = func(y[::-1], w[::-1], alpha)[::-1]
-    loss = left_loss + right_loss
+
+    kwargs = {}
+    if method != "heap":
+        kwargs['ranks'] = rankdata(y)
+    left_loss = func(y, w, alpha, **kwargs)
+    if method != "heap":
+        kwargs['ranks'] = kwargs['ranks'][::-1]
+    right_loss = func(y[::-1], w[::-1], alpha, **kwargs)[::-1]
+    loss = left_loss[:-1] + right_loss[1:]
     # impossible to split between 2 points that are exactly equals:
     loss[x[:-1] == x[1:]] = np.inf
 
